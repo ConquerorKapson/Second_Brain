@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+google-adk
+weaviate-client
+neo4j
+python-dotenv
+pdfplumber
+pydantic
+requests
+pytest
+black
+mypy

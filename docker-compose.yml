@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  weaviate:
+    image: semitechnologies/weaviate:1.27.0
+    environment:
+      - QUERY_DEFAULTS_LIMIT=20
+      - AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED=true
+      - PERSISTENCE_DATA_PATH=/var/lib/weaviate
+      - WEAVIATE_URL=http://weaviate:8080
+
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data/weaviate:/var/lib/weaviate
+
+  neo4j:
+    image: neo4j:5
+    environment:
+      - NEO4J_AUTH=neo4j/secondbrain123
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4j_data:/data
+
+  api:
+    build:
+      context: .
+      dockerfile: infra/api/Dockerfile
+    command: uvicorn src.api.app:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./src:/app/src
+      - ./requirements.txt:/app/requirements.txt:ro
+      - ./data:/app/data
+    ports:
+      - "8000:8000"
+    depends_on:
+      - weaviate
+      - neo4j
+
+volumes:
+  weaviate_data:
+  neo4j_data:

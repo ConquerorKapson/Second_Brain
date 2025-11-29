@@ -1,0 +1,15 @@
+# ADK configuration (skeleton). Populate with your ADK project settings and agent definitions.
+project:
+  id: adk-personal-memory
+agents:
+  root_agent:
+    entrypoint: src.agents.root_agent:RootAgent
+    sub_agents:
+      - src.agents.ingest_agent:IngestAgent
+      - src.agents.embedding_agent:EmbeddingAgent
+      - src.agents.linking_agent:LinkingAgent
+tools:
+  vector_tool:
+    module: src.tools.vector_tool:VectorTool
+  kg_tool:
+    module: src.tools.kg_tool:KGTool
